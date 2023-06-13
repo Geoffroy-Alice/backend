@@ -1,15 +1,15 @@
 //-----On importe express-----
 const express = require('express');
-
 //-----On importe la connexion a mongoDB-----
 const mongoose = require('mongoose');
-
+//-----On importe path-----
+const path = require('path');
 //-----Appel de express-----
 const app = express();
-
-
-//-----On utilise express.json pour récupérer et afficher en format json-----
-app.use(express.json());
+//-----On importe routes/sauce-----
+const sauceRoutes = require('./routes/sauce');
+//-----On importe routes/user-----
+const userRoutes = require('./routes/user');
 
 //-----CORS-----
 app.use((req, res, next) => {
@@ -19,23 +19,20 @@ app.use((req, res, next) => {
     next();
   });
 
-app.use ((req, res, next) => {
-    console.log('Requête reçue!');
-    next();
-});
+  //-----Connexion a mongoDB-----
+  mongoose.connect('mongodb+srv://geoffroyalice:salobeudidesreux@cluster0.lwj954g.mongodb.net/',
+  { useNewUrlParser: true,
+    useUnifiedTopology: true })
+  .then(() => console.log('Connexion à MongoDB réussie !'))
+  .catch(() => console.log('Connexion à MongoDB échouée !'));
 
-app.use((req, res, next) => {
-    res.status(201);
-    next();
-});
+//-----On utilise express.json pour récupérer et afficher en format json-----
+app.use(express.json());
 
-app.use((req, res, next) => {
-    res.json({message: 'Votre requête a bien été reçue!'});
-    next();
-});
 
-app.use((req, res) => {
-    console.log('Réponse envoyée avec succès!');
-});
+//-----Routes-----
+app.use('/api/sauces', sauceRoutes);
+app.use('/api/auth', userRoutes);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 module.exports = app;
