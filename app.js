@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const path = require('path');
 //-----Appel de express-----
 const app = express();
+//-----On importe helmet pour sécuriser l'API-----
+const helmet = require('helmet');
 //-----On importe routes/sauce-----
 const sauceRoutes = require('./routes/sauce');
 //-----On importe routes/user-----
@@ -19,6 +21,13 @@ app.use((req, res, next) => {
     next();
   });
 
+//-----On utilise Helmet-----
+app.use(helmet());
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  next();
+});
+
   //-----Connexion a mongoDB-----
   mongoose.connect('mongodb+srv://geoffroyalice:salobeudidesreux@cluster0.lwj954g.mongodb.net/',
   { useNewUrlParser: true,
@@ -28,7 +37,6 @@ app.use((req, res, next) => {
 
 //-----On utilise express.json pour récupérer et afficher en format json-----
 app.use(express.json());
-
 
 //-----Routes-----
 app.use('/api/sauces', sauceRoutes);
