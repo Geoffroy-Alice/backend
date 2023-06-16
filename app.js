@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
   });
 
-//-----On utilise Helmet-----
+//-----On utilise Helmet pour protéger l'application de certaines vulnérabilités-----
 app.use(helmet());
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "same-site");

@@ -8,10 +8,13 @@ const jwt = require('jsonwebtoken');
 
 //-----On inscrit un nouvel utilisateur-----
 exports.signup = (req, res, next) => {
-const validatePassword = /(?=.*[a-zA-Z])(?=.*[0-9]+)(?=.*?[#?!@$%^&*-]).*/g.test(req.body.password);
+//-----Constante regex-----
+const validatePassword = /(?=.*[a-zA-Z])(?=.*[0-9]+)(?=.*?[#?!.@$%^&*-]).*/g.test(req.body.password);
+//-----Si validatePassword (mot de passe) ne comporte pas les caractères contenus dans la regex-----
   if(!validatePassword) {
     res.status(400).send('Le mot de passe est invalide. Il doit contenir minuscule, majuscule, chiffre et caractère spécial.')
   }
+//-----Si validationPassword ne comporte pas un minimum de caractère-----
   if(req.body.password.length < 12) {
     res.status(400).send('Le mot de passe doit contenir au minimum 12 caractères')
   }
